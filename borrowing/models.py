@@ -2,13 +2,14 @@ import datetime
 
 from django.db import models
 from user.models import User
+from library.models import Book
 
 
 class Borrowing(models.Model):
     borrow_date = models.DateField(auto_now_add=True)
     expected_return_date = models.DateField()
     actual_return_date = models.DateField(blank=True, null=True)
-    # book = models.OneToOneField(Book, on_delete=models.CASCADE, related_name="books")
+    book = models.OneToOneField(Book, on_delete=models.CASCADE, related_name="books")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="users")
 
     def clean(self):

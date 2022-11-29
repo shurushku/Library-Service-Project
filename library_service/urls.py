@@ -20,7 +20,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/library/", include("library.urls", namespace="library")),
     path("api/users/", include("user.urls", namespace="user")),
+<<<<<<< HEAD
     path("api/borrowings/", include("borrowing.urls", namespace="borrowing")),
 
     path("__debug__/", include("debug_toolbar.urls")),
+=======
+    path("api/borrowing/", include("borrowing.urls", namespace="borrowing")),
+>>>>>>> 2a38cb4 (Combine 3 tables)
 ]
