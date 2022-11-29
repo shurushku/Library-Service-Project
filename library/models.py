@@ -4,7 +4,7 @@ from django.db import models
 class Book(models.Model):
     COVER_CHOICES = [
         ("HARD", "Hardcover"),
-        ("SOFT", "Sortcover")
+        ("SOFT", "Softcover")
     ]
 
     title = models.CharField(max_length=255)
