@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "library",
     "user",
+    "borrowing",
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,4 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     )
 }
+
