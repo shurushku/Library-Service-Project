@@ -47,6 +47,10 @@ def sample_payment(**params):
     return Payment.objects.create(**defaults)
 
 
+def detail_url(payment_id):
+    return reverse("payment:payment-detail", args=[payment_id])
+
+
 class UnauthenticatedPaymentApiTests(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
@@ -64,7 +68,7 @@ class AuthenticatedPaymentApiTests(TestCase):
         )
         self.client.force_authenticate(self.user)
 
-    def test_list_payments(self):
+    def test_list_of_user_payments(self):
         second_user = get_user_model().objects.create_user(
             "user2@gmail.com", "password2"
         )
@@ -83,6 +87,18 @@ class AuthenticatedPaymentApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
+    def test_retrieve_payment_detail(self):
+        borrowing = sample_borrowing(user=self.user, book=sample_book())
+        payment = sample_payment(borrowing=borrowing)
+
+        url = detail_url(payment.id)
+        res = self.client.get(url)
+
+        serializer = PaymentSerializer(payment)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data, serializer.data)
+
 
 class AdminPaymentApiTests(TestCase):
     def setUp(self) -> None:
@@ -92,7 +108,7 @@ class AdminPaymentApiTests(TestCase):
         )
         self.client.force_authenticate(self.user)
 
-    def test_list_payments(self):
+    def test_list_of_all_payments(self):
         user = get_user_model().objects.create_user(
             "user@gmail.com", "password2"
         )
