@@ -1,4 +1,3 @@
-from django.db import transaction
 from rest_framework import serializers
 
 from borrowing.models import Borrowing
@@ -18,13 +17,27 @@ class BorrowingListSerializer(BorrowingSerializer):
 
     class Meta:
         model = Borrowing
-        fields = ("book", "author", "user", "borrow_date", "expected_return_date")
+        fields = (
+            "book",
+            "author",
+            "user",
+            "borrow_date",
+            "expected_return_date"
+        )
 
 
 class BorrowingDetailSerializer(BorrowingListSerializer):
     cover = serializers.CharField(source="book.cover", read_only=True)
-    inventory = serializers.IntegerField(source="book.inventory", read_only=True)
-    daily_fee = serializers.DecimalField(source="book.daily_fee", read_only=True, max_digits=6, decimal_places=2)
+    inventory = serializers.IntegerField(
+        source="book.inventory",
+        read_only=True
+    )
+    daily_fee = serializers.DecimalField(
+        source="book.daily_fee",
+        read_only=True,
+        max_digits=6,
+        decimal_places=2
+    )
 
     class Meta:
         model = Borrowing
