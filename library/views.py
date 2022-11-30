@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.permissions import IsAdminUser
 
 from library.models import Book
 from library.serializers import BookSerializer, BookListSerializer
