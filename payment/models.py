@@ -1,4 +1,7 @@
 from django.db import models
+from django.core.validators import MinValueValidator
+
+# from borrowing.models import Borrowing
 
 
 class Payment(models.Model):
@@ -19,5 +22,5 @@ class Payment(models.Model):
     # borrowing = models.OneToOneField(to=Borrowing)
     session_url = models.URLField()
     session_id = models.TextField()
-    money_to_pay = models.IntegerField()
+    money_to_pay = models.IntegerField(validators=[MinValueValidator(0)])
 
