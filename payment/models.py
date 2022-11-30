@@ -1,7 +1,6 @@
 from django.db import models
-from django.core.validators import MinValueValidator
 
-# from borrowing.models import Borrowing
+from borrowing.models import Borrowing
 
 
 class Payment(models.Model):
@@ -14,12 +13,11 @@ class Payment(models.Model):
         ("FINE", "Fine"),
     )
 
-    status = models.CharField(
-        max_length=7, choices=STATUS_CHOICES, default="PENDING"
+    payment_status = models.CharField(max_length=7, choices=STATUS_CHOICES)
+    payment_type = models.CharField(max_length=7, choices=TYPE_CHOICES)
+    borrowing = models.OneToOneField(
+        to=Borrowing, on_delete=models.CASCADE, related_name="payment"
     )
-    pay_type = models.CharField(max_length=7, choices=TYPE_CHOICES)
-    borrowing = models.CharField(max_length=255)
-    # borrowing = models.OneToOneField(to=Borrowing, related_name="payment")
     session_url = models.URLField()
-    session_id = models.TextField()
-    money_to_pay = models.IntegerField(validators=[MinValueValidator(0)])
+    session_id = models.CharField(max_length=100)
+    money_to_pay = models.DecimalField(max_digits=6, decimal_places=2)

@@ -1,7 +1,7 @@
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 
-from .permissions import IfAuthenticatedReadOnly
+from rest_framework.permissions import IsAuthenticated
 from .serializers import PaymentSerializer
 from .models import Payment
 
@@ -9,12 +9,11 @@ from .models import Payment
 class PaymentViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
-    mixins.CreateModelMixin,
     GenericViewSet,
 ):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    permission_classes = (IfAuthenticatedReadOnly,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.is_staff:

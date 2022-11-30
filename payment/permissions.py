@@ -1,6 +1,7 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
+# Permission for future
 class IfAuthenticatedReadOnly(BasePermission):
     def has_permission(self, request, view):
         return bool(
