@@ -8,7 +8,25 @@ class BorrowingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Borrowing
-        fields = ("book", "borrow_date", "expected_return_date", "user")
+        fields = ("book", "borrow_date", "expected_return_date")
+
+    def validate(self, attrs):
+        data = super(BorrowingSerializer, self).validate(attrs)
+
+        if attrs["book"].inventory == 0:
+            raise serializers.ValidationError(
+                {"inventory": "no books left in library"}
+            )
+
+        return data
+
+    def save(self, **kwargs):
+        instance = super(BorrowingSerializer, self).save(**kwargs)
+
+        instance.book.inventory -= 1
+        instance.book.save()
+
+        return instance
 
 
 class BorrowingListSerializer(BorrowingSerializer):
