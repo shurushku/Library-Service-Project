@@ -1,22 +1,35 @@
-from rest_framework import viewsets
+from rest_framework import mixins, generics
 
 from borrowing.models import Borrowing
 from borrowing.serializers import (
-    BorrowingSerializer,
     BorrowingDetailSerializer,
-    BorrowingListSerializer
+    BorrowingListSerializer,
+    BorrowingSerializer,
 )
 
 
-class BorrowingViewSet(viewsets.ModelViewSet):
+class BorrowingList(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    generics.GenericAPIView,
+):
     queryset = Borrowing.objects.all()
-    serializer_class = BorrowingSerializer
+    serializer_class = BorrowingListSerializer
 
-    def get_serializer_class(self):
-        if self.action == "list":
-            return BorrowingListSerializer
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-        if self.action == "retrieve":
-            return BorrowingDetailSerializer
+    def post(self, request, *args, **kwargs):
+        self.serializer_class = BorrowingSerializer
+        return self.create(request, *args, **kwargs)
 
-        return BorrowingSerializer
+
+class BorrowingDetail(
+    mixins.ListModelMixin,
+    generics.GenericAPIView,
+):
+    queryset = Borrowing.objects.all()
+    serializer_class = BorrowingDetailSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
