@@ -5,9 +5,10 @@ from library.serializers import BookSerializer
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Borrowing
-        fields = ("book", "borrow_date", "expected_return_date", "user")
+        fields = ("book", "borrow_date", "expected_return_date")
 
     def validate(self, attrs):
         data = super(BorrowingSerializer, self).validate(attrs)
@@ -26,7 +27,6 @@ class BorrowingSerializer(serializers.ModelSerializer):
         instance.book.save()
 
         return instance
-
 
 
 class BorrowingListSerializer(BorrowingSerializer):
