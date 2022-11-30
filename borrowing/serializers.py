@@ -5,10 +5,19 @@ from library.serializers import BookSerializer
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Borrowing
         fields = ("book", "borrow_date", "expected_return_date", "user")
+
+    def validate(self, attrs):
+        data = super(BorrowingSerializer, self).validate(attrs)
+
+        if attrs["book"].inventory == 0:
+            raise serializers.ValidationError(
+                {"inventory": "no books left in library"}
+            )
+
+        return data
 
 
 class BorrowingListSerializer(BorrowingSerializer):
