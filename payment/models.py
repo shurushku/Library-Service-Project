@@ -17,10 +17,9 @@ class Payment(models.Model):
     status = models.CharField(
         max_length=7, choices=STATUS_CHOICES, default="PENDING"
     )
-    type = models.CharField(max_length=7, choices=TYPE_CHOICES)
+    pay_type = models.CharField(max_length=7, choices=TYPE_CHOICES)
     borrowing = models.CharField(max_length=255)
-    # borrowing = models.OneToOneField(to=Borrowing)
+    # borrowing = models.OneToOneField(to=Borrowing, related_name="payment")
     session_url = models.URLField()
     session_id = models.TextField()
     money_to_pay = models.IntegerField(validators=[MinValueValidator(0)])
-
