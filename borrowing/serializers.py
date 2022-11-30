@@ -19,6 +19,15 @@ class BorrowingSerializer(serializers.ModelSerializer):
 
         return data
 
+    def save(self, **kwargs):
+        instance = super(BorrowingSerializer, self).save(**kwargs)
+
+        instance.book.inventory -= 1
+        instance.book.save()
+
+        return instance
+
+
 
 class BorrowingListSerializer(BorrowingSerializer):
     user = serializers.CharField(source="user.email", read_only=True)
