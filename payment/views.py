@@ -16,7 +16,7 @@ from borrowing.models import Borrowing
 
 
 load_dotenv()
-stripe.api_key = os.environ["STRIPE_API_KEY"]
+stripe.api_key = os.environ.get("STRIPE_API_KEY", "")
 
 
 class PaymentViewSet(
