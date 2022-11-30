@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "library",
     "user",
-    "rest_framework",
 ]
 
 MIDDLEWARE = [
