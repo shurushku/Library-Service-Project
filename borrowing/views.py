@@ -23,7 +23,7 @@ class BorrowingViewSet(
         queryset = self.queryset.select_related("book")
 
         if self.action == "list" and not self.request.user.is_staff:
-            return Borrowing.objects.filter(user=self.request.user)
+            return queryset.filter(user=self.request.user)
 
         return queryset
 
