@@ -89,7 +89,7 @@ class ModelsTests(TestCase):
 
         self.assertTrue(borrowing)
 
-    def test_actual_return_gt_date_current_date_forbidden(self):
+    def test_actual_return_date_gt_current_date_forbidden(self):
         expected_return_date = datetime.date.today() + datetime.timedelta(days=4)
         date_gt_current_date = datetime.date.today() + datetime.timedelta(days=1)
 
@@ -105,7 +105,7 @@ class ModelsTests(TestCase):
 
         self.assertEqual(IntegrityError, type(raised.exception))
 
-    def test_actual_return_not_lt_current_date_forbidden(self):
+    def test_actual_return_date_lt_current_date_forbidden(self):
         expected_return_date = datetime.date.today() + datetime.timedelta(days=4)
         date_lt_current_date = datetime.date.today() - datetime.timedelta(days=1)
 
