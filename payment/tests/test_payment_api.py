@@ -9,7 +9,7 @@ from rest_framework.test import APIClient
 from library.models import Book
 from borrowing.models import Borrowing
 from payment.models import Payment
-from payment.serializers import PaymentSerializer, PaymentDetailSerializer
+from payment.serializers import PaymentSerializer
 
 PAYMENT_URL = reverse("payment:payment-list")
 
@@ -94,7 +94,7 @@ class AuthenticatedPaymentApiTests(TestCase):
         url = detail_url(payment.id)
         res = self.client.get(url)
 
-        serializer = PaymentDetailSerializer(payment)
+        serializer = PaymentSerializer(payment)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)

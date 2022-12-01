@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from borrowing.models import Borrowing
 from library.serializers import BookSerializer
+from payment.serializers import PaymentBorrowingDetailSerializer
 from payment.views import create_payment
 
 
@@ -33,7 +34,7 @@ class BorrowingSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         with transaction.atomic():
             borrowing = Borrowing.objects.create(**validated_data)
-            create_payment(borrowing=borrowing)
+            create_payment(borrowing=borrowing, payment_type="PAYMENT")
             return borrowing
 
 
@@ -58,6 +59,7 @@ class BorrowingListSerializer(BorrowingSerializer):
 
 class BorrowingDetailSerializer(BorrowingListSerializer):
     book = BookSerializer(many=False, read_only=True)
+    payment = PaymentBorrowingDetailSerializer(many=False, read_only=True)
 
     class Meta:
         model = Borrowing
@@ -67,4 +69,5 @@ class BorrowingDetailSerializer(BorrowingListSerializer):
             "borrow_date",
             "expected_return_date",
             "actual_return_date",
+            "payment",
         )

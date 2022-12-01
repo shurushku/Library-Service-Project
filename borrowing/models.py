@@ -39,3 +39,11 @@ class Borrowing(models.Model):
                 name="check_actual_return_date",
             ),
         ]
+
+    def get_total_price(self, payment_type: str) -> str:
+        book_price = self.book.daily_fee
+        if payment_type == "PAYMENT":
+            count_of_days = self.expected_return_date - self.borrow_date
+        if payment_type == "FINE":
+            count_of_days = self.actual_return_date - self.expected_return_date
+        return str(round(book_price * count_of_days.days, 2))

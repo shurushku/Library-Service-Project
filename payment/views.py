@@ -17,20 +17,11 @@ load_dotenv()
 stripe.api_key = os.environ.get("STRIPE_API_KEY")
 
 
-def _get_money_to_pay(borrowing: Borrowing) -> str:
-    book_price = borrowing.book.daily_fee
-    start_date = borrowing.borrow_date
-    end_date = borrowing.expected_return_date
-    count_of_days = end_date - start_date
-    return str(round(book_price * count_of_days.days, 2))
-
-
-def create_payment(borrowing: Borrowing):
-    money_to_pay = _get_money_to_pay(borrowing)
+def create_payment(borrowing: Borrowing, payment_type: str):
+    money_to_pay = borrowing.get_total_price(payment_type)
     book_title = borrowing.book.title
     unit_amount = int(money_to_pay.replace(".", ""))
     session = stripe.checkout.Session.create(
-        # customer_email=self.request.user.email,
         line_items=[{
             "price_data": {
                 "currency": "usd",
@@ -47,7 +38,7 @@ def create_payment(borrowing: Borrowing):
     Payment.objects.create(
         borrowing=borrowing,
         payment_status="PENDING",
-        payment_type="PAYMENT",
+        payment_type=payment_type,
         session_url=session.url,
         session_id=session.id,
         money_to_pay=float(money_to_pay),
