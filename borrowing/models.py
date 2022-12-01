@@ -13,14 +13,14 @@ class Borrowing(models.Model):
     expected_return_date = models.DateField()
     actual_return_date = models.DateField(blank=True, null=True)
     book = models.ForeignKey(
-        Book,
+        to=Book,
         on_delete=models.CASCADE,
-        related_name="books"
+        related_name="borrowings"
     )
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="users"
+        related_name="borrowings"
     )
 
     class Meta:
@@ -39,3 +39,11 @@ class Borrowing(models.Model):
                 name="check_actual_return_date",
             ),
         ]
+
+    def get_total_price(self, payment_type: str) -> str:
+        book_price = self.book.daily_fee
+        if payment_type == "PAYMENT":
+            count_of_days = self.expected_return_date - self.borrow_date
+        if payment_type == "FINE":
+            count_of_days = self.actual_return_date - self.expected_return_date
+        return str(round(book_price * count_of_days.days, 2))
