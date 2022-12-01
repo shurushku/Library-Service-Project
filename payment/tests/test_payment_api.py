@@ -9,7 +9,7 @@ from rest_framework.test import APIClient
 from library.models import Book
 from borrowing.models import Borrowing
 from payment.models import Payment
-from payment.serializers import PaymentSerializer
+from payment.serializers import PaymentSerializer, PaymentDetailSerializer
 
 PAYMENT_URL = reverse("payment:payment-list")
 
@@ -29,7 +29,7 @@ def sample_book(**params):
 
 def sample_borrowing(**params):
     defaults = {
-        "expected_return_date": datetime.now() + timedelta(days=1),
+        "expected_return_date": datetime.now().date() + timedelta(days=1),
     }
     defaults.update(params)
 
@@ -94,7 +94,7 @@ class AuthenticatedPaymentApiTests(TestCase):
         url = detail_url(payment.id)
         res = self.client.get(url)
 
-        serializer = PaymentSerializer(payment)
+        serializer = PaymentDetailSerializer(payment)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
