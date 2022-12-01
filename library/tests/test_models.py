@@ -4,7 +4,7 @@ from library.models import Book
 
 
 class ModelsTests(TestCase):
-    def test_manufacturer_str(self):
+    def test_book_str(self):
         book = Book.objects.create(
             title="Book",
             author="Author",

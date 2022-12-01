@@ -28,7 +28,7 @@ class Borrowing(models.Model):
             CheckConstraint(
                 check=(
                     Q(expected_return_date__gt=F("borrow_date"))
-                    & Q(expected_return_date__lt=(
+                    & Q(expected_return_date__lte=(
                         datetime.date.today()
                         + datetime.timedelta(days=30)))
                 ),
