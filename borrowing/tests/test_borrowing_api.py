@@ -111,6 +111,31 @@ class AuthenticatedBorrowingApiTests(TestCase):
         self.assertEqual(payload["book"], borrowing.book_id)
         self.assertEqual(self.user, borrowing.user)
 
+    def test_create_borrowing_with_0_inventory_forbidden(self):
+        book = sample_book(inventory=0)
+        payload = {
+            "expected_return_date": sample_expected_return_date(7),
+            "book": book.id,
+        }
+
+        res = self.client.post(BORROWING_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_borrowing_decreasing_book_inventory_by_1(self):
+        start_inventory = 3
+        book = sample_book(inventory=start_inventory)
+        payload = {
+            "expected_return_date": sample_expected_return_date(7),
+            "book": book.id,
+        }
+
+        self.client.post(BORROWING_URL, payload)
+
+        book.refresh_from_db()
+
+        self.assertEqual(book.inventory, start_inventory - 1)
+
 
 class AdminMovieApiTests(TestCase):
     def setUp(self) -> None:
