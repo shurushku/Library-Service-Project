@@ -11,6 +11,7 @@ from borrowing.serializers import (
 
 class BorrowingViewSet(
     mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
     viewsets.GenericViewSet
 ):
@@ -19,10 +20,12 @@ class BorrowingViewSet(
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return self.queryset
+        queryset = self.queryset.select_related("book")
 
-        return Borrowing.objects.filter(user=self.request.user)
+        if self.action == "list" and not self.request.user.is_staff:
+            return queryset.filter(user=self.request.user)
+
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "list":

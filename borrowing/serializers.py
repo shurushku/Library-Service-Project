@@ -8,7 +8,7 @@ class BorrowingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Borrowing
-        fields = ("book", "borrow_date", "expected_return_date")
+        fields = ("id", "book", "borrow_date", "expected_return_date")
 
     def validate(self, attrs):
         data = super(BorrowingSerializer, self).validate(attrs)
@@ -37,6 +37,7 @@ class BorrowingListSerializer(BorrowingSerializer):
     class Meta:
         model = Borrowing
         fields = (
+            "id",
             "book",
             "author",
             "user",
