@@ -1,7 +1,9 @@
+from django.db import transaction
 from rest_framework import serializers
 
 from borrowing.models import Borrowing
 from library.serializers import BookSerializer
+from payment.views import create_payment
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
@@ -27,6 +29,12 @@ class BorrowingSerializer(serializers.ModelSerializer):
         instance.book.save()
 
         return instance
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            borrowing = Borrowing.objects.create(**validated_data)
+            create_payment(borrowing=borrowing)
+            return borrowing
 
 
 class BorrowingListSerializer(BorrowingSerializer):
