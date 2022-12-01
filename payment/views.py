@@ -14,7 +14,7 @@ from borrowing.models import Borrowing
 SUCCESS_URL = "http://127.0.0.1:8000/api/payment/success"
 CANCEL_URL = "http://127.0.0.1:8000/api/payment/cancel"
 load_dotenv()
-stripe.api_key = os.environ.get("STRIPE_API_KEY")
+stripe.api_key = os.environ.get("STRIPE_API_KEY", "")
 
 
 def create_payment(borrowing: Borrowing, payment_type: str):
