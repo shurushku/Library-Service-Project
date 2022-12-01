@@ -18,6 +18,6 @@ class Payment(models.Model):
     borrowing = models.ForeignKey(
         to=Borrowing, on_delete=models.CASCADE, related_name="payments"
     )
-    session_url = models.URLField()
-    session_id = models.CharField(max_length=100)
+    session_url = models.URLField(blank=True, null=True)
+    session_id = models.CharField(max_length=100, blank=True, null=True)
     money_to_pay = models.DecimalField(max_digits=6, decimal_places=2)
