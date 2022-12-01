@@ -77,7 +77,6 @@ class PaymentViewSet(
             cancel_url=self.CANCEL_URL,
         )
 
-        print(self.request)
         serializer.save(
             session_url=session.url,
             session_id=session.id,
